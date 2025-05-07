@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+  --glow-cyan: #0ff;
+  --glow-purple: #a0f;
+  --glow-red: #f33;
+  --glow-green: #3f3;
+  --bg-dark: #000a12;
+  --bg-light: #f0f4f8;
+  --text-dark: #222;
+  --text-light: #eee;
+}
+
+html[data-theme='dark'] {
+  --bg: var(--bg-dark);
+  --text: var(--text-light);
+  --card-bg: #001a2e;
+  --input-bg: #002a4a;
+  --border-color: #0ff;
+}
+
+html[data-theme='light'] {
+  --bg: var(--bg-light);
+  --text: var(--text-dark);
+  --card-bg: #e0e8f0;
+  --input-bg: #fff;
+  --border-color: #00aaff;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Glow Text */
+.glow-text {
+  text-shadow:
+    0 0 6px var(--glow-cyan),
+    0 0 12px var(--glow-cyan),
+    0 0 18px var(--glow-purple),
+    0 0 24px var(--glow-purple);
+}
+
+/* Cards */
+.card-glow {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 0 8px var(--glow-cyan),
+    inset 0 0 6px var(--glow-purple);
+  color: var(--text);
+  user-select: none;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(45deg, #0ff, #a0f);
+  color: #000;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 8px var(--glow-cyan);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+.btn-primary:hover {
+  background: linear-gradient(45deg, #3ff, #c0f);
+  box-shadow: 0 0 12px var(--glow-purple);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1.5px solid var(--glow-cyan);
+  color: var(--glow-cyan);
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 6px var(--glow-cyan);
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+.btn-secondary:hover {
+  background-color: var(--glow-cyan);
+  color: #000;
+  box-shadow: 0 0 10px var(--glow-purple);
+}
+
+/* Emergency Button */
+.btn-emergency {
+  background: #f33;
+  color: #fff;
+  font-weight: 900;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 12px #f33;
+  user-select: none;
+  transition: box-shadow 0.5s ease;
+}
+.btn-emergency.pulsing {
+  animation: pulse-red 1.5s infinite;
+}
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 12px #f33; }
+  50% { box-shadow: 0 0 24px #f33; }
+}
+
+/* Inputs */
+.input-glow {
+  background-color: var(--input-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  box-shadow: 0 0 6px var(--glow-cyan);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline-offset: 2px;
+}
+.input-glow:focus {
+  border-color: var(--glow-purple);
+  box-shadow: 0 0 12px var(--glow-purple);
+}
+
+/* Modal */
+#modals-container {
+  backdrop-filter: blur(6px);
+}
+.modal-card {
+  border: 1.5px solid var(--glow-cyan);
+  box-shadow:
+    0 0 12px var(--glow-cyan),
+    inset 0 0 8px var(--glow-purple);
+  user-select: none;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform:  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.bounce {
+  animation: bounce 0.5s ease;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--glow-cyan);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 0.5rem 0.5rem 0 0;
+  box-shadow: inset 0 -3px 0 var(--glow-cyan);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+.nav-btn:hover {
+  background-color: rgba(0, 255, 255, 0.15);
+}
+.nav-btn.active {
+  background-color: var(--glow-cyan);
+  color: #000;
+  box-shadow: none;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: var(--glow-purple);
+  color: #000;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+.tooltip.show {
+  opacity: 1;
+}
+
+/* AI Notes Box */
+.ai-notes {
+  border: 1.5px solid var(--glow-purple);
+  box-shadow:
+    0 0 12px var(--glow-purple),
+    inset 0 0 8px var(--glow-cyan);
+  user-select: text;
+  max-height: 20vh;
+  overflow-y: auto;
+  backdrop-filter: blur(6px);
+}
+
+/* Toggle Checkbox */
+.toggle-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--glow-cyan);
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  main {
+    padding: 1rem;
+  }
+  .nav-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  #ai-notes {
+    bottom: 1rem;
+    right: 1rem;
+    max-width: 90vw;
+  }
+}

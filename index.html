@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MediSecure - Medical OS Control Panel</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-black text-gray-200 font-sans select-none flex flex-col min-h-screen">
+
+  <!-- Top Bar -->
+  <header class="flex items-center justify-between bg-gradient-to-r from-cyan-900 via-blue-900 to-purple-900 px-6 py-3 shadow-lg relative z-30 border-b border-cyan-700">
+    <h1 class="text-2xl font-extrabold tracking-wide text-cyan-400 glow-text">MediSecure</h1>
+    <nav class="flex space-x-4 text-sm font-semibold uppercase tracking-widest">
+      <button data-view="dashboard" class="nav-btn active">Dashboard</button>
+      <button data-view="patients" class="nav-btn">Patients</button>
+      <button data-view="records" class="nav-btn">Records</button>
+      <button data-view="staff" class="nav-btn">Staff</button>
+      <button data-view="appointments" class="nav-btn">Appointments</button>
+      <button data-view="settings" class="nav-btn">Settings</button>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <button id="emergency-override" class="btn-emergency" title="Emergency Access Override">⚠️</button>
+      <button id="toggle-theme" class="btn-theme" title="Toggle Dark/Light Mode">🌗</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow overflow-hidden flex flex-col">
+    <!-- Views Container -->
+    <section id="views-container" class="flex-grow overflow-auto p-6 space-y-6">
+
+      <!-- Dashboard View -->
+      <section id="view-dashboard" class="view active space-y-6">
+        <h2 class="text-xl font-bold glow-text">Dashboard Overview</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card-glow p-4 flex flex-col items-center justify-center">
+            <h3 class="text-lg font-semibold mb-2">Total Patients</h3>
+            <div id="dashboard-patients" class="text-4xl font-extrabold text-cyan-400 glow-text">0</div>
+          </div>
+          <div class="card-glow p-4 flex flex-col items-center justify-center">
+            <h3 class="text-lg font-semibold mb-2">Upcoming Appointments</h3>
+            <div id="dashboard-appointments" class="text-4xl font-extrabold text-purple-400 glow-text">0</div>
+          </div>
+          <div class="card-glow p-4 flex flex-col items-center justify-center">
+            <h3 class="text-lg font-semibold mb-2">Visits Trend</h3>
+            <canvas id="dashboard-visits-chart" class="w-full h-32 bg-gradient-to-tr from-cyan-900 to-purple-900 rounded-lg shadow-inner"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Patients View -->
+      <section id="view-patients" class="view hidden flex flex-col space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold glow-text">Patients</h2>
+          <button id="btn-add-patient" class="btn-primary">+ Add Patient</button>
+        </div>
+        <div class="flex space-x-4 items-center">
+          <input id="patient-search" type="search" placeholder="Search patients..." class="input-glow flex-grow" />
+          <select id="patient-filter" class="input-glow w-48">
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="discharged">Discharged</option>
+            <option value="critical">Critical</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto rounded-lg shadow-lg border border-cyan-700">
+          <table class="min-w-full text-left text-gray-300">
+            <thead class="bg-cyan-900/80">
+              <tr>
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Age</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Last Visit</th>
+                <th class="px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patients-table-body" class="bg-black/80"></tbody>
+          </table>
+        </div>
+        <div class="flex justify-center space-x-4 mt-2">
+          <button id="patients-prev-page" class="btn-secondary px-3 py-1 rounded">Prev</button>
+          <span id="patients-page-info" class="text-cyan-400 font-semibold"></span>
+          <button id="patients-next-page" class="btn-secondary px-3 py-1 rounded">Next</button>
+        </div>
+      </section>
+
+      <!-- Records View -->
+      <section id="view-records" class="view hidden flex flex-col space-y-4">
+        <h2 class="text-xl font-bold glow-text">Records</h2>
+        <p class="text-gray-400 italic">Records management coming soon...</p>
+      </section>
+
+      <!-- Staff View -->
+      <section id="view-staff" class="view hidden flex flex-col space-y-4">
+        <h2 class="text-xl font-bold glow-text">Staff</h2>
+        <p class="text-gray-400 italic">Staff management coming soon...</p>
+      </section>
+
+      <!-- Appointments View -->
+      <section id="view-appointments" class="view hidden flex flex-col space-y-4">
+        <h2 class="text-xl font-bold glow-text">Appointments</h2>
+        <p class="text-gray-400 italic">Appointments management coming soon...</p>
+      </section>
+
+      <!-- Settings View -->
+      <section id="view-settings" class="view hidden flex flex-col space-y-4 max-w-xl">
+        <h2 class="text-xl font-bold glow-text">Settings</h2>
+
+        <div class="space-y-4">
+          <div>
+            <label for="qr-login-toggle" class="flex items-center space-x-3 cursor-pointer">
+              <input type="checkbox" id="qr-login-toggle" class="toggle-checkbox" />
+              <span class="text-gray-300 font-semibold">Enable QR Code Login (Patient)</span>
+            </label>
+          </div>
+
+          <div>
+            <button id="btn-export-data" class="btn-primary w-full">Export Data (JSON)</button>
+          </div>
+
+          <div>
+            <label for="import-file" class="btn-secondary w-full cursor-pointer text-center">Import Data (JSON)</label>
+            <input type="file" id="import-file" accept="application/json" class="hidden" />
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- Floating AI Notes Whisper Box -->
+  <div id="ai-notes" class="ai-notes fixed bottom-6 right-6 max-w-sm p-4 rounded-lg bg-gradient-to-tr from-purple-900/90 to-cyan-900/90 shadow-lg glow-text text-sm font-mono opacity-90 cursor-default select-text">
+    <h3 class="font-bold mb-2">AI Notes Summary</h3>
+    <div id="ai-notes-content" class="whitespace-pre-wrap min-h-[4rem]">Fill patient form to generate notes...</div>
+  </div>
+
+  <!-- Modals Container -->
+  <div id="modals-container" class="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-40 hidden">
+    <!-- Add/Edit Patient Modal -->
+    <div id="modal-patient" class="modal-card bg-gradient-to-tr from-cyan-900 to-purple-900 rounded-lg shadow-xl max-w-lg w-full p-6 relative animate-fadeIn">
+      <button class="modal-close absolute top-3 right-3 text-cyan-400 hover:text-purple-400 text-2xl font-bold" title="Close">&times;</button>
+      <h2 class="text-xl font-bold mb-4 glow-text" id="modal-patient-title">Add Patient</h2>
+      <form id="form-patient" class="space-y-4" novalidate>
+        <div>
+          <```html
+          <label for="patient-name" class="block mb-1 font-semibold">Full Name</label>
+          <input type="text" id="patient-name" name="name" class="input-glow w-full" required minlength="3" />
+        </div>
+        <div>
+          <label for="patient-age" class="block mb-1 font-semibold">Age</label>
+          <input type="number" id="patient-age" name="age" class="input-glow w-full" required min="0" max="120" />
+        </div>
+        <div>
+          <label for="patient-status" class="block mb-1 font-semibold">Status</label>
+          <select id="patient-status" name="status" class="input-glow w-full" required>
+            <option value="active">Active</option>
+            <option value="discharged">Discharged</option>
+            <option value="critical">Critical</option>
+          </select>
+        </div>
+        <div>
+          <label for="patient-last-visit" class="block mb-1 font-semibold">Last Visit</label>
+          <input type="date" id="patient-last-visit" name="lastVisit" class="input-glow w-full" required />
+        </div>
+        <div>
+          <label for="patient-notes" class="block mb-1 font-semibold">Notes</label>
+          <textarea id="patient-notes" name="notes" rows="3" class="input-glow w-full font-mono text-sm" placeholder="Enter medical notes..."></textarea>
+        </div>
+        <div class="flex justify-end space-x-4 pt-4">
+          <button type="button" id="modal-patient-cancel" class="btn-secondary px-4 py-2 rounded">Cancel</button>
+          <button type="submit" id="modal-patient-submit" class="btn-primary px-4 py-2 rounded">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- QR Code Login Modal -->
+  <div id="modal-qr-login" class="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-sm z-50 hidden">
+    <div class="modal-card bg-gradient-to-tr from-purple-900 to-cyan-900 rounded-lg shadow-xl max-w-md w-full p-6 relative animate-fadeIn">
+      <button class="modal-close absolute top-3 right-3 text-cyan-400 hover:text-purple-400 text-2xl font-bold" title="Close">&times;</button>
+      <h2 class="text-xl font-bold mb-4 glow-text">Patient QR Code Login</h2>
+      <div class="flex flex-col items-center space-y-4">
+        <canvas id="qr-code-canvas" class="bg-black rounded-lg shadow-lg"></canvas>
+        <input type="text" id="qr-login-pin" placeholder="Enter PIN" class="input-glow w-full max-w-xs text-center" maxlength="6" />
+        <button id="btn-qr-login-submit" class="btn-primary w-full max-w-xs">Login</button>
+      </div>
+      <p class="mt-4 text-xs text-gray-400 italic text-center">Use your Patient ID QR code and PIN to login securely.</p>
+    </div>
+  </div>
+
+</body>
+</html>
